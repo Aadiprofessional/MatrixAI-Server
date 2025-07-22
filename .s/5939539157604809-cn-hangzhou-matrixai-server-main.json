@@ -1,0 +1,47 @@
+{
+  "statefulConfig": {
+    "functionId": "c26b6a7d-1982-44fe-9ca1-68107990f84a",
+    "functionName": "main",
+    "description": "Main HTTP handler",
+    "runtime": "nodejs18",
+    "handler": "index.handler",
+    "timeout": 900,
+    "initializer": "",
+    "initializationTimeout": 3,
+    "codeSize": 8777115,
+    "codeChecksum": "6887738467073680914",
+    "memorySize": 1024,
+    "gpuMemorySize": null,
+    "environmentVariables": {
+      "ENVIRONMENT": "production",
+      "NODE_ENV": "production"
+    },
+    "createdTime": "2025-07-07T06:16:41Z",
+    "lastModifiedTime": "2025-07-22T05:14:30Z",
+    "instanceConcurrency": 1,
+    "instanceSoftConcurrency": null,
+    "customContainerConfig": null,
+    "caPort": null,
+    "instanceType": "e1",
+    "layers": null,
+    "layersArnV2": null,
+    "instanceLifecycleConfig": {
+      "preFreeze": {
+        "handler": "",
+        "timeout": 3,
+        "command": null
+      },
+      "preStop": {
+        "handler": "",
+        "timeout": 3,
+        "command": null
+      }
+    },
+    "customDNS": null,
+    "customRuntimeConfig": null,
+    "customHealthCheckConfig": null,
+    "sessionAffinity": null,
+    "initializerCommand": null,
+    "name": "main"
+  }
+}

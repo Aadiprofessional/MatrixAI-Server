@@ -1,0 +1,47 @@
+{
+  "statefulConfig": {
+    "functionId": "bfdb41cb-91e5-47d8-9d16-3d24d637a483",
+    "functionName": "video-processor",
+    "description": "Background video generation processor",
+    "runtime": "nodejs18",
+    "handler": "src/services/videoProcessor.handler",
+    "timeout": 900,
+    "initializer": "",
+    "initializationTimeout": 3,
+    "codeSize": 59970614,
+    "codeChecksum": "5392225809500314757",
+    "memorySize": 1024,
+    "gpuMemorySize": null,
+    "environmentVariables": {
+      "ENVIRONMENT": "production",
+      "NODE_ENV": "production"
+    },
+    "createdTime": "2025-07-08T02:04:15Z",
+    "lastModifiedTime": "2025-07-08T02:14:26Z",
+    "instanceConcurrency": 1,
+    "instanceSoftConcurrency": null,
+    "customContainerConfig": null,
+    "caPort": null,
+    "instanceType": "e1",
+    "layers": null,
+    "layersArnV2": null,
+    "instanceLifecycleConfig": {
+      "preFreeze": {
+        "handler": "",
+        "timeout": 3,
+        "command": null
+      },
+      "preStop": {
+        "handler": "",
+        "timeout": 3,
+        "command": null
+      }
+    },
+    "customDNS": null,
+    "customRuntimeConfig": null,
+    "customHealthCheckConfig": null,
+    "sessionAffinity": null,
+    "initializerCommand": null,
+    "name": "video-processor"
+  }
+}

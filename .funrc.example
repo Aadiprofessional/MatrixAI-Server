@@ -1,0 +1,8 @@
+[default]
+# Replace with your Alibaba Cloud credentials
+access_key_id = your_access_key_id
+access_key_secret = your_access_key_secret
+region = cn-hangzhou
+account_id = your_account_id
+timeout = 60
+retries = 3

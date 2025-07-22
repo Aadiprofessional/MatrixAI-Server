@@ -1,0 +1,38 @@
+edition: 1.0.0
+name: edusmart-api
+access: default
+
+services:
+  edusmart-nodejs:
+    component: fc
+    props:
+      region: cn-hangzhou
+      service:
+        name: edusmart-service
+        internetAccess: true
+        logConfig:
+          project: edusmart-log-project        
+          logstore: edusmart-log-project 
+      function:
+        name: edusmart-api
+        runtime: nodejs18
+        codeUri: ./
+        handler: handler.handler
+        memorySize: 1024
+        timeout: 600
+        asyncConfiguration:
+          maxAsyncEventAge: 3600
+          maxAsyncRetryAttempts: 1
+        environmentVariables:
+          SUPABASE_URL: https://cdqrmxmqsoxncnkxiqwu.supabase.co
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkcXJteG1xc294bmNua3hpcXd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM3NTM2MzgsImV4cCI6MjA1OTMyOTYzOH0.2-66_0X62mcPTybkc4BmGpV6nbzgMTRM90cPy0lnJRg
+          SUPABASE_KEY : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkcXJteG1xc294bmNua3hpcXd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM3NTM2MzgsImV4cCI6MjA1OTMyOTYzOH0.2-66_0X62mcPTybkc4BmGpV6nbzgMTRM90cPy0lnJRg
+          SUPABASE_SERVICE_ROLE_KEY : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkcXJteG1xc294bmNua3hpcXd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0Mzc1MzYzOCwiZXhwIjoyMDU5MzI5NjM4fQ.1mhLCVfTJ6BjczuVX0Zs7qqqnMBXDiP46PatouMTGMg
+          JWT_SECRET: P8sG4xe6FfDrMEFJhX0g2zRLIykNtEnVcUxQjylt0lUU6K6bchpT39AQNpesdtNnspEOX+AD7UHEOtb0tHJ77A==
+          NODE_ENV: production
+        events:
+          - name: httpTrigger
+            type: http
+            config:
+              authType: anonymous
+              methods: [ GET, POST, PUT, DELETE, OPTIONS, PATCH ] 

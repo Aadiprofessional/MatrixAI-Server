@@ -1,0 +1,32 @@
+# Local development environment variables for Wrangler
+# Copy this file to .dev.vars and replace with your actual credentials
+# The .dev.vars file should not be committed to version control
+
+# Alibaba Cloud Configuration
+ALIBABA_CLOUD_ACCESS_KEY_ID=your_alibaba_cloud_access_key_id
+ALIBABA_CLOUD_ACCESS_KEY_SECRET=your_alibaba_cloud_access_key_secret
+
+# Function Compute Configuration
+FC_ACCOUNT_ID=your_fc_account_id
+FC_ACCESS_KEY_ID=your_fc_access_key_id
+FC_ACCESS_KEY_SECRET=your_fc_access_key_secret
+FC_REGION=cn-hangzhou
+FC_SERVICE_NAME=matrixai-server
+BASE_URL=your_base_url
+
+# Supabase Configuration
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_ANON_KEY=your-supabase-anon-key-here
+
+# Deepgram Configuration
+DEEPGRAM_API_URL=https://api.deepgram.com/v1/listen
+DEEPGRAM_API_KEY=your-deepgram-api-key-here
+
+# DashScope Configuration
+DASHSCOPE_API_KEY=your-dashscope-api-key
+DASHSCOPEVIDEO_API_KEY=your-dashscope-video-api-key
+DASHSCOPEIMAGE_API_KEY=your-dashscope-image-api-key
+
+# Environment
+ENVIRONMENT=development
+NODE_ENV=development

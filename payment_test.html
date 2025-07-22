@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatrixAI Payment API Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: white;
+            border-color: #ddd;
+            border-bottom-color: white;
+            margin-bottom: -1px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .payment-method {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            width: calc(25% - 10px);
+            box-sizing: border-box;
+            cursor: pointer;
+            text-align: center;
+        }
+        .payment-method:hover {
+            background-color: #f0f0f0;
+        }
+        .payment-method.selected {
+            border-color: #3498db;
+            background-color: #ebf5fb;
+        }
+    </style>
+</head>
+<body>
+    <h1>MatrixAI Payment API Test</h1>
+    
+    <div class="container">
+        <h2>API Configuration</h2>
+        <div class="form-group">
+            <label for="apiUrl">API URL:</label>
+            <input type="text" id="apiUrl" value="https://main-matrixai-server-lujmidrakh.cn-hangzhou.fcapp.run" placeholder="Enter API URL">
+        </div>
+        <div class="form-group">
+            <label for="jwtToken">JWT Token:</label>
+            <input type="text" id="jwtToken" placeholder="Enter JWT Token">
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="methods">Payment Methods</div>
+        <div class="tab" data-tab="create">Create Payment</div>
+        <div class="tab" data-tab="status">Payment Status</div>
+        <div class="tab" data-tab="cancel">Cancel Payment</div>
+        <div class="tab" data-tab="history">Payment History</div>
+    </div>
+
+    <div class="container tab-content active" id="methods">
+        <h2>Get Payment Methods</h2>
+        <p>This endpoint returns all available payment methods.</p>
+        <button id="getMethodsBtn">Get Payment Methods</button>
+        <div id="methodsResult" class="result">Results will appear here...</div>
+        <div class="payment-methods" id="paymentMethodsList"></div>
+    </div>
+
+    <div class="container tab-content" id="create">
+        <h2>Create Payment</h2>
+        <p>This endpoint creates a new payment transaction.</p>
+        
+        <div class="form-group">
+            <label for="planId">Plan ID:</label>
+            <input type="text" id="planId" placeholder="Enter subscription plan ID">
+        </div>
+        <div class="form-group">
+            <label for="addonId">Addon ID (optional):</label>
+            <input type="text" id="addonId" placeholder="Enter addon plan ID">
+        </div>
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" value="99.99" step="0.01">
+        </div>
+        <div class="form-group">
+            <label for="currency">Currency:</label>
+            <select id="currency">
+                <option value="USD">USD</option>
+                <option value="PHP">PHP</option>
+                <option value="EUR">EUR</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="paymentMethodType">Payment Method:</label>
+            <select id="paymentMethodType">
+                <option value="GCASH">GCash</option>
+                <option value="MAYA">Maya</option>
+                <option value="VISA">Visa</option>
+                <option value="MASTERCARD">Mastercard</option>
+                <option value="AMEX">American Express</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="orderDescription">Order Description:</label>
+            <input type="text" id="orderDescription" value="Premium Plan Subscription">
+        </div>
+        
+        <button id="createPaymentBtn">Create Payment</button>
+        <div id="createResult" class="result">Results will appear here...</div>
+    </div>
+
+    <div class="container tab-content" id="status">
+        <h2>Query Payment Status</h2>
+        <p>This endpoint checks the status of a payment.</p>
+        
+        <div class="form-group">
+            <label for="statusPaymentRequestId">Payment Request ID:</label>
+            <input type="text" id="statusPaymentRequestId" placeholder="Enter payment request ID">
+        </div>
+        
+        <button id="getStatusBtn">Get Payment Status</button>
+        <div id="statusResult" class="result">Results will appear here...</div>
+    </div>
+
+    <div class="container tab-content" id="cancel">
+        <h2>Cancel Payment</h2>
+        <p>This endpoint cancels a pending payment.</p>
+        
+        <div class="form-group">
+            <label for="cancelPaymentRequestId">Payment Request ID:</label>
+            <input type="text" id="cancelPaymentRequestId" placeholder="Enter payment request ID">
+        </div>
+        
+        <button id="cancelPaymentBtn">Cancel Payment</button>
+        <div id="cancelResult" class="result">Results will appear here...</div>
+    </div>
+
+    <div class="container tab-content" id="history">
+        <h2>Payment History</h2>
+        <p>This endpoint retrieves payment transaction history.</p>
+        
+        <div class="form-group">
+            <label for="historyPage">Page:</label>
+            <input type="number" id="historyPage" value="1" min="1">
+        </div>
+        <div class="form-group">
+            <label for="historyLimit">Limit:</label>
+            <input type="number" id="historyLimit" value="10" min="1" max="100">
+        </div>
+        <div class="form-group">
+            <label for="historyStatus">Status (optional):</label>
+            <select id="historyStatus">
+                <option value="">All</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="failed">Failed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+        
+        <button id="getHistoryBtn">Get Payment History</button>
+        <div id="historyResult" class="result">Results will appear here...</div>
+    </div>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Helper function to format JSON
+        function formatJSON(json) {
+            try {
+                return JSON.stringify(JSON.parse(json), null, 2);
+            } catch (e) {
+                return json;
+            }
+        }
+
+        // Helper function to make API calls
+        async function callAPI(endpoint, method = 'GET', body = null) {
+            const apiUrl = document.getElementById('apiUrl').value.trim();
+            const jwtToken = document.getElementById('jwtToken').value.trim();
+            
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (jwtToken && endpoint !== '/api/payment/methods') {
+                headers['Authorization'] = `Bearer ${jwtToken}`;
+            }
+            
+            const options = {
+                method,
+                headers
+            };
+            
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+            
+            try {
+                const response = await fetch(`${apiUrl}${endpoint}`, options);
+                const data = await response.text();
+                return { success: response.ok, data };
+            } catch (error) {
+                return { success: false, data: error.message };
+            }
+        }
+
+        // Get Payment Methods
+        document.getElementById('getMethodsBtn').addEventListener('click', async () => {
+            const resultElement = document.getElementById('methodsResult');
+            const methodsListElement = document.getElementById('paymentMethodsList');
+            
+            resultElement.textContent = 'Loading...';
+            methodsListElement.innerHTML = '';
+            
+            const result = await callAPI('/api/payment/methods');
+            resultElement.textContent = formatJSON(result.data);
+            
+            if (result.success) {
+                try {
+                    const data = JSON.parse(result.data);
+                    if (data.success && data.data) {
+                        Object.entries(data.data).forEach(([key, method]) => {
+                            const methodElement = document.createElement('div');
+                            methodElement.className = 'payment-method';
+                            methodElement.dataset.method = key;
+                            methodElement.innerHTML = `
+                                <strong>${method.name}</strong><br>
+                                ${method.type} | ${method.currency}<br>
+                                ${method.country}
+                            `;
+                            methodElement.addEventListener('click', () => {
+                                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+                                methodElement.classList.add('selected');
+                                document.getElementById('paymentMethodType').value = key;
+                                
+                                // Switch to create payment tab
+                                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                                document.querySelector('.tab[data-tab="create"]').classList.add('active');
+                                document.getElementById('create').classList.add('active');
+                            });
+                            methodsListElement.appendChild(methodElement);
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error parsing payment methods:', e);
+                }
+            }
+        });
+
+        // Create Payment
+        document.getElementById('createPaymentBtn').addEventListener('click', async () => {
+            const resultElement = document.getElementById('createResult');
+            const jwtToken = document.getElementById('jwtToken').value.trim();
+            
+            if (!jwtToken) {
+                resultElement.textContent = 'Error: JWT Token is required for this endpoint';
+                return;
+            }
+            
+            const planId = document.getElementById('planId').value.trim();
+            const addonId = document.getElementById('addonId').value.trim();
+            
+            if (!planId && !addonId) {
+                resultElement.textContent = 'Error: Either Plan ID or Addon ID is required';
+                return;
+            }
+            
+            resultElement.textContent = 'Creating payment...';
+            
+            const payload = {
+                amount: parseFloat(document.getElementById('amount').value),
+                currency: document.getElementById('currency').value,
+                paymentMethodType: document.getElementById('paymentMethodType').value,
+                orderDescription: document.getElementById('orderDescription').value
+            };
+            
+            if (planId) payload.planId = planId;
+            if (addonId) payload.addonId = addonId;
+            
+            const result = await callAPI('/api/payment/create', 'POST', payload);
+            resultElement.textContent = formatJSON(result.data);
+            
+            if (result.success) {
+                try {
+                    const data = JSON.parse(result.data);
+                    if (data.success && data.data && data.data.paymentRequestId) {
+                        document.getElementById('statusPaymentRequestId').value = data.data.paymentRequestId;
+                        document.getElementById('cancelPaymentRequestId').value = data.data.paymentRequestId;
+                    }
+                } catch (e) {
+                    console.error('Error parsing create payment response:', e);
+                }
+            }
+        });
+
+        // Get Payment Status
+        document.getElementById('getStatusBtn').addEventListener('click', async () => {
+            const resultElement = document.getElementById('statusResult');
+            const jwtToken = document.getElementById('jwtToken').value.trim();
+            const paymentRequestId = document.getElementById('statusPaymentRequestId').value.trim();
+            
+            if (!jwtToken) {
+                resultElement.textContent = 'Error: JWT Token is required for this endpoint';
+                return;
+            }
+            
+            if (!paymentRequestId) {
+                resultElement.textContent = 'Error: Payment Request ID is required';
+                return;
+            }
+            
+            resultElement.textContent = 'Getting payment status...';
+            
+            const result = await callAPI(`/api/payment/status/${paymentRequestId}`);
+            resultElement.textContent = formatJSON(result.data);
+        });
+
+        // Cancel Payment
+        document.getElementById('cancelPaymentBtn').addEventListener('click', async () => {
+            const resultElement = document.getElementById('cancelResult');
+            const jwtToken = document.getElementById('jwtToken').value.trim();
+            const paymentRequestId = document.getElementById('cancelPaymentRequestId').value.trim();
+            
+            if (!jwtToken) {
+                resultElement.textContent = 'Error: JWT Token is required for this endpoint';
+                return;
+            }
+            
+            if (!paymentRequestId) {
+                resultElement.textContent = 'Error: Payment Request ID is required';
+                return;
+            }
+            
+            resultElement.textContent = 'Cancelling payment...';
+            
+            const result = await callAPI(`/api/payment/cancel/${paymentRequestId}`, 'POST');
+            resultElement.textContent = formatJSON(result.data);
+        });
+
+        // Get Payment History
+        document.getElementById('getHistoryBtn').addEventListener('click', async () => {
+            const resultElement = document.getElementById('historyResult');
+            const jwtToken = document.getElementById('jwtToken').value.trim();
+            
+            if (!jwtToken) {
+                resultElement.textContent = 'Error: JWT Token is required for this endpoint';
+                return;
+            }
+            
+            resultElement.textContent = 'Getting payment history...';
+            
+            const page = document.getElementById('historyPage').value;
+            const limit = document.getElementById('historyLimit').value;
+            const status = document.getElementById('historyStatus').value;
+            
+            let endpoint = `/api/payment/history?page=${page}&limit=${limit}`;
+            if (status) {
+                endpoint += `&status=${status}`;
+            }
+            
+            const result = await callAPI(endpoint);
+            resultElement.textContent = formatJSON(result.data);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "statefulConfig": {
+    "serviceName": "matrixai-server",
+    "description": "MatrixAI Server",
+    "role": "",
+    "logConfig": {
+      "project": "",
+      "logstore": "",
+      "enableRequestMetrics": false,
+      "enableInstanceMetrics": false,
+      "logBeginRule": "None",
+      "enableCustomExtraLog": true
+    },
+    "serviceId": "c1c5229d-d16f-4085-8f5a-9a586bf24911",
+    "createdTime": "2025-07-07T06:15:53Z",
+    "lastModifiedTime": "2025-07-22T05:14:31Z",
+    "vpcConfig": {
+      "vpcId": "",
+      "vSwitchIds": [],
+      "securityGroupId": "",
+      "role": null,
+      "anytunnelViaENI": null
+    },
+    "internetAccess": true,
+    "nasConfig": {
+      "userId": -1,
+      "groupId": -1,
+      "mountPoints": []
+    },
+    "ossMountConfig": {
+      "mountPoints": []
+    },
+    "vendorConfig": null,
+    "tracingConfig": {
+      "type": null,
+      "params": null,
+      "jaegerConfig": null
+    },
+    "useSLRAuthentication": false,
+    "name": "matrixai-server"
+  }
+}

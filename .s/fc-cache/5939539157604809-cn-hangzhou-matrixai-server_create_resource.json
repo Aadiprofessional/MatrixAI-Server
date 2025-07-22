@@ -1,0 +1,6 @@
+{
+  "serviceName": "matrixai-server",
+  "functionNames": [
+    "matrixai-server/main"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "statefulConfig": {
+    "functionId": "142f85ec-f5c1-4d41-9022-1909f9f24dac",
+    "functionName": "audio-processor",
+    "description": "Background audio transcription processor",
+    "runtime": "nodejs18",
+    "handler": "src/services/audioProcessor.handler",
+    "timeout": 900,
+    "initializer": "",
+    "initializationTimeout": 3,
+    "codeSize": 59970597,
+    "codeChecksum": "1022679397663286121",
+    "memorySize": 1024,
+    "gpuMemorySize": null,
+    "environmentVariables": {
+      "ENVIRONMENT": "production",
+      "NODE_ENV": "production"
+    },
+    "createdTime": "2025-07-08T02:13:55Z",
+    "lastModifiedTime": "2025-07-08T02:13:55Z",
+    "instanceConcurrency": 1,
+    "instanceSoftConcurrency": null,
+    "customContainerConfig": null,
+    "caPort": null,
+    "instanceType": "e1",
+    "layers": null,
+    "layersArnV2": null,
+    "instanceLifecycleConfig": {
+      "preFreeze": {
+        "handler": "",
+        "timeout": 3,
+        "command": null
+      },
+      "preStop": {
+        "handler": "",
+        "timeout": 3,
+        "command": null
+      }
+    },
+    "customDNS": null,
+    "customRuntimeConfig": null,
+    "customHealthCheckConfig": null,
+    "sessionAffinity": null,
+    "initializerCommand": null,
+    "name": "audio-processor"
+  }
+}

@@ -1,0 +1,66 @@
+edition: 1.0.0
+name: matrixai-server
+access: default
+
+services:
+  matrixai-server:
+    component: fc
+    props:
+      region: cn-hangzhou
+      service:
+        name: matrixai-server
+        description: MatrixAI Server - Unified Handler
+        internetAccess: true
+      function:
+        name: main
+        description: Main HTTP handler with unified audio, video, image processing
+        runtime: nodejs18
+        codeUri: ./
+        handler: index.handler
+        memorySize: 1024
+        timeout: 300
+        environmentVariables:
+          ENVIRONMENT: ${env.ENVIRONMENT}
+          NODE_ENV: ${env.NODE_ENV}
+          FC_ACCOUNT_ID: ${env.FC_ACCOUNT_ID}
+          FC_ACCESS_KEY_ID: ${env.FC_ACCESS_KEY_ID}
+          FC_ACCESS_KEY_SECRET: ${env.FC_ACCESS_KEY_SECRET}
+          FC_REGION: ${env.FC_REGION}
+          FC_SERVICE_NAME: ${env.FC_SERVICE_NAME}
+          BASE_URL: ${env.BASE_URL}
+          SUPABASE_URL: ${env.SUPABASE_URL}
+          SUPABASE_ANON_KEY: ${env.SUPABASE_ANON_KEY}
+          DEEPGRAM_API_URL: ${env.DEEPGRAM_API_URL}
+          DEEPGRAM_API_KEY: ${env.DEEPGRAM_API_KEY}
+          DASHSCOPE_API_KEY: ${env.DASHSCOPE_API_KEY}
+          DASHSCOPEVIDEO_API_KEY: ${env.DASHSCOPEVIDEO_API_KEY}
+          DASHSCOPEIMAGE_API_KEY: ${env.DASHSCOPEIMAGE_API_KEY}
+      triggers:
+        - name: httpTrigger
+          type: http
+          config:
+            authType: anonymous
+            methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            cors:
+              allowCredentials: false
+              allowHeaders:
+                - Content-Type
+                - Authorization
+                - X-Requested-With
+              allowMethods:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - OPTIONS
+              allowOrigins:
+                - '*'
+              exposeHeaders:
+                - Content-Length
+                - Content-Type
+              maxAge: 86400

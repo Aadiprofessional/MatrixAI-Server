@@ -1,0 +1,29 @@
+{
+  "statefulConfig": {
+    "triggerName": "httpTrigger",
+    "description": "",
+    "triggerId": "d737f81d-bf42-4066-baea-c12cd5b3d0f6",
+    "sourceArn": null,
+    "triggerType": "http",
+    "invocationRole": null,
+    "qualifier": "LATEST",
+    "urlInternet": "https://main-matrixai-server-lujmidrakh.cn-hangzhou.fcapp.run",
+    "urlIntranet": "https://main-matrixai-server-lujmidrakh.cn-hangzhou-vpc.fcapp.run",
+    "triggerConfig": {
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+      ],
+      "authType": "anonymous",
+      "disableURLInternet": false
+    },
+    "createdTime": "2025-07-07T06:16:49Z",
+    "lastModifiedTime": "2025-07-22T05:14:31Z",
+    "status": null,
+    "targetArn": null,
+    "name": "httpTrigger"
+  }
+}

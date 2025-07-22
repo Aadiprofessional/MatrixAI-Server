@@ -1,0 +1,115 @@
+const generatePdf = async () => {
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Invoice</title>
+        <style>
+          body { font-family: 'Roboto', sans-serif; }
+          .logo { width: 200px; height: auto; margin-bottom: 20px; }
+          .header-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+          .logo-container { text-align: left; }
+          .invoice-title { text-align: right; }
+          .invoice-title h1 { font-size: 2.5rem; font-weight: bold; color: #000; margin: 0; }
+          .invoice-section { display: flex; justify-content: space-between; margin-top: 20px; }
+          .invoice-to, .invoice-from { width: 50%; }
+          .invoice-to { text-align: left; }
+          .invoice-from { text-align: right; }
+          .invoice-header { border-top: 3px solid #FCCC51; border-bottom: 3px solid #FCCC51; margin: 30px 0; padding: 10px 0; }
+          .invoice-header h2 { font-size: 2rem; font-weight: bold; color: #000; }
+          .text-primary { color: #FCCC51; }
+          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+          th, td { padding: 8px 12px; text-align: left; }
+          th { background-color: #f2f2f2; }
+          td { background-color: #ffffff; }
+          tr:nth-child(odd) td { background-color: #f2f2f2; }
+          .quantity-title { color: #000; font-weight: bold; }
+          .discount-row { color: #28a745; font-weight: bold; }
+        </style>
+      </head>
+      <body>
+        <section id="invoice">
+          <div class="header-container">
+            <div class="logo-container">
+              <img src="https://firebasestorage.googleapis.com/v0/b/crossbee.appspot.com/o/logo.png?alt=media&token=b7622c61-0fff-4083-ac26-a202a0cd970d" alt="MatrixAI Logo" class="logo">
+            </div>
+            <div class="invoice-title">
+              <h1>INVOICE</h1>
+            </div>
+          </div>
+
+          <div class="invoice-section">
+            <div class="invoice-to">
+              <p class="text-primary">Invoice To</p>
+              <h4>${invoiceData.owner || 'N/A'}</h4>
+              <ul>
+                <li>${invoiceData.address || 'N/A'}</li>
+                <li>${invoiceData.email || 'N/A'}</li>
+                <li>${invoiceData.phoneNumber || 'N/A'}</li>
+              </ul>
+            </div>
+            <div class="invoice-from">
+              <p class="text-primary">Invoice From</p>
+              <h4>MatrixAI Global</h4>
+              <ul>
+                <li>MatrixAI Global Headquarters</li>
+                <li>support@matrixaiglobal.com</li>
+                <li>+1 (800) MATRIX-AI</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="invoice-header">
+            <h2>Invoice</h2>
+            <div>
+              <p>Invoice No: ${invoiceData.uid || 'N/A'}</p>
+              <p>Invoice Date: ${invoiceData.timestamp.split('T')[0]}</p>
+              <p>Due Date: ${invoiceData.timestamp.split('T')[0]}</p>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Discounted Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${invoiceData.cartItems.map((item, index) => `
+                <tr>
+                  <td>${index + 1}</td>
+                  <td>${item.productName || 'N/A'}</td>
+                  <td>${item.price || '0.00'}</td>
+                  <td>${item.discountedPrice || '0.00'}</td>
+                  <td>${item.quantity || 0}</td>
+                  <td>${(item.price * item.quantity).toFixed(2)}</td>
+                </tr>`).join('')}
+              <tr>
+                <td colspan="4">Sub-Total</td>
+                <td colspan="2">${invoiceData.totalAmount.toFixed(2)}</td>
+              </tr>
+              <tr class="discount-row">
+                <td colspan="4">Discount</td>
+                <td colspan="2">0.00</td>
+              </tr>
+              <tr>
+                <td colspan="4">Shipping Charges</td>
+                <td colspan="2">${invoiceData.shippingCharges.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="text-primary">Grand Total</td>
+                <td colspan="2" class="text-primary">${(invoiceData.totalAmount + invoiceData.shippingCharges).toFixed(2)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </body>
+      </html>
+    `;

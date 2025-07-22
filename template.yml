@@ -1,0 +1,62 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+
+Resources:
+  matrixai-server:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'MatrixAI Server - Modular Serverless Architecture'
+      Role: 'acs:ram::5939539157604809:role/aliyunfcdefaultrole'
+      InternetAccess: true
+    
+    main:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Description: 'Main HTTP handler for MatrixAI Server'
+        Runtime: nodejs18
+        CodeUri: ./
+        Handler: index.handler
+        MemorySize: 512
+        Timeout: 30
+        EnvironmentVariables:
+          ENVIRONMENT: production
+          NODE_ENV: production
+          SUPABASE_URL: 'https://ddtgdhehxhgarkonvpfq.supabase.co'
+          SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdGdkaGVoeGhnYXJrb252cGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ2Njg4MTIsImV4cCI6MjA1MDI0NDgxMn0.mY8nx-lKrNXjJxHU7eEja3-fTSELQotOP4aZbxvmNPY'
+          DEEPGRAM_API_URL: 'https://api.deepgram.com/v1/listen'
+          DEEPGRAM_API_KEY: '45ef09cde6cad708abadbe83e5e9eff19f398427'
+          DASHSCOPE_API_KEY: 'sk-1234567890abcdef1234567890abcdef'
+          DASHSCOPEVIDEO_API_KEY: 'sk-e580e1af954e41a6a1e90f5adac47bc3'
+          DASHSCOPEIMAGE_API_KEY: 'sk-e580e1af954e41a6a1e90f5adac47bc3'
+          BASE_URL: 'https://matrixai-server.pages.dev'
+        Events:
+          HttpTrigger:
+            Type: HTTP
+            Properties:
+              AuthType: ANONYMOUS
+              Methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+              Cors:
+                AllowCredentials: false
+                AllowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+                AllowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+                AllowOrigins: ['*']
+                ExposeHeaders: ['Content-Length', 'Content-Type']
+                MaxAge: 86400
+    
+    video-processor:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Description: 'Background video generation processor'
+        Runtime: nodejs18
+        CodeUri: ./
+        Handler: src/services/videoProcessor.handler
+        MemorySize: 1024
+        Timeout: 900
+        EnvironmentVariables:
+          ENVIRONMENT: production
+          NODE_ENV: production
+          SUPABASE_URL: 'https://ddtgdhehxhgarkonvpfq.supabase.co'
+          SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdGdkaGVoeGhnYXJrb252cGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ2Njg4MTIsImV4cCI6MjA1MDI0NDgxMn0.mY8nx-lKrNXjJxHU7eEja3-fTSELQotOP4aZbxvmNPY'
+          DASHSCOPE_API_KEY: 'sk-1234567890abcdef1234567890abcdef'
+          DASHSCOPEVIDEO_API_KEY: 'sk-e580e1af954e41a6a1e90f5adac47bc3'
+          DASHSCOPEIMAGE_API_KEY: 'sk-e580e1af954e41a6a1e90f5adac47bc3'
