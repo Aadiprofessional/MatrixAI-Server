@@ -1,0 +1,8 @@
+{
+  "serviceName": "matrixai-server",
+  "functionNames": [
+    "matrixai-server/main"
+  ],
+  "project": "5939539157604809-ap-southeast-1-logproject",
+  "logstore": "5939539157604809-ap-southeast-1-logproject/fc-service-matrixai-server-logstore"
+}

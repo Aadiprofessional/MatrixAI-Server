@@ -1,4 +1,4 @@
-const { createClient } = require('@supabase/supabase-js');
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * Get Supabase admin client
@@ -49,7 +49,7 @@ const supabaseClient = (jwt) => {
   });
 };
 
-module.exports = {
+export {
   supabaseAdmin,
   supabaseClient
 };

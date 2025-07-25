@@ -313,17 +313,40 @@ The new audio processing system works as follows:
 
 ## 🚀 Deployment
 
+### Cloudflare Pages Deployment
+
 The project automatically deploys to Cloudflare Pages when you:
 
 1. Push to the `main` branch (production deployment)
 2. Push to the `develop` branch (preview deployment)
 3. Create a pull request to `main` (preview deployment)
 
+### Alibaba Cloud Deployment
+
+For deployment to Alibaba Cloud Function Compute:
+
+1. Ensure you have the Serverless Devs CLI installed: `npm install -g @serverless-devs/s`
+2. Configure your Alibaba Cloud credentials
+3. Run the deployment script: `./deploy-setup.sh`
+
+The script will:
+- Install all dependencies
+- Install Sharp for both local and server platforms
+- Deploy the application using `s deploy`
+- Test the deployment
+
+For detailed instructions, see [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md).
+
 ## 📈 Monitoring
 
-- **Logs**: Check Cloudflare Pages dashboard for function logs
-- **Analytics**: Available in Cloudflare Analytics
+- **Logs**: 
+  - For Cloudflare deployment: Check Cloudflare Pages dashboard for function logs
+  - For Alibaba Cloud deployment: Check the Alibaba Cloud Log Service console
+    - Project: `matrixai-log-project`
+    - Logstore: `fc-invocation-logs`
+- **Analytics**: Available in Cloudflare Analytics and Alibaba Cloud monitoring dashboards
 - **Health**: Use the `/health` endpoint for monitoring
+- **Image Processing**: Monitor Sharp image processing performance via the `/health` endpoint
 
 ## 🔍 Troubleshooting
 
@@ -338,18 +361,30 @@ The project automatically deploys to Cloudflare Pages when you:
 
 3. **CORS issues**: Update the CORS origins in `src/app.js`
 
-4. **Build failures**: Check GitHub Actions logs
+4. **Logs not appearing in Alibaba Cloud Log Service**:
+   - Verify that the log project `matrixai-log-project` and logstore `fc-invocation-logs` exist in the Alibaba Cloud Log Service console
+   - Check that the service has proper permissions to write to the log service
+   - Ensure the logConfig section is correctly configured in the deployment files (s.yaml, s.yml, template.yml)
 
-5. **Route not found**: Verify the route is registered in `src/app.js`
+5. **Build failures**: Check GitHub Actions logs
 
-6. **Audio processing fails**: 
+6. **Route not found**: Verify the route is registered in `src/app.js`
+
+7. **Audio processing fails**: 
    - Check if user has sufficient coins in the database
    - Verify Deepgram API key is working
    - Ensure audio URL is accessible publicly
 
+8. **Sharp image processing issues**:
+   - If you see errors like "Could not load the 'sharp' module using the linux-x64 runtime", run the `deploy-setup.sh` script which installs Sharp for both local and server platforms
+   - For manual fix: `npm install --os=linux --cpu=x64 sharp`
+   - See [IMAGE_PROCESSING_UPDATE.md](./IMAGE_PROCESSING_UPDATE.md) for details on the migration from Jimp to Sharp
+
 ## 📖 Documentation
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Detailed architecture documentation
+- [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Alibaba Cloud deployment instructions
+- [IMAGE_PROCESSING_UPDATE.md](./IMAGE_PROCESSING_UPDATE.md) - Migration from Jimp to Sharp
 - [API Documentation](https://your-domain.pages.dev/api) - Live API info endpoint
 
 ## 🤝 Contributing

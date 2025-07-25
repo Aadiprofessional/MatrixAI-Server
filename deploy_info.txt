@@ -1,0 +1,41 @@
+[J[1mmatrixai-server: [22m
+  [1mregion: [22m  cn-hangzhou
+  [1mservice: [22m
+    [1mname: [22m          matrixai-server
+    [1minternetAccess: [22m[32mtrue[39m
+    [1mrole: [22m          acs:ram::5939539157604809:role/aliyunfcdefaultrole
+    [1mdescription: [22m   MatrixAI Server
+    [1mlogConfig: [22m
+      [1mproject: [22m              matrixai-log-project
+      [1mlogstore: [22m             fc-invocation-logs
+      [1menableRequestMetrics: [22m [31mfalse[39m
+      [1menableInstanceMetrics: [22m[31mfalse[39m
+      [1mlogBeginRule: [22m         None
+      [1menableCustomExtraLog: [22m [32mtrue[39m
+  [1mfunction: [22m
+    [1mname: [22m                 main
+    [1mruntime: [22m              nodejs18
+    [1mhandler: [22m              index.handler
+    [1mtimeout: [22m              [34m900[39m
+    [1minstanceType: [22m         e1
+    [1mmemorySize: [22m           [34m1024[39m
+    [1mdescription: [22m          Main HTTP handler
+    [1minitializationTimeout: [22m[34m3[39m
+    [1minstanceConcurrency: [22m  [34m1[39m
+    [1menvironmentVariables: [22m
+      [1mENVIRONMENT: [22mproduction
+      [1mNODE_ENV: [22m   production
+  [1mtriggers: [22m
+    [32m- [39m
+      [1mname: [22m       httpTrigger
+      [1mtype: [22m       http
+      [1mconfig: [22m
+        [1mqualifier: [22mLATEST
+        [1mauthType: [22m anonymous
+        [1mmethods: [22m
+          [32m- [39mGET
+          [32m- [39mPOST
+          [32m- [39mPUT
+          [32m- [39mDELETE
+          [32m- [39mOPTIONS
+      [1murlInternet: [22mhttps://main-matrixai-server-lujmidrakh.cn-hangzhou.fcapp.run

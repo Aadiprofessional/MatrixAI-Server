@@ -11,6 +11,9 @@ services:
         name: matrixai-server
         description: MatrixAI Server - Unified Handler
         internetAccess: true
+        logConfig:
+          project: matrixai-log-project
+          logstore: fc-invocation-logs
       function:
         name: main
         description: Main HTTP handler with unified audio, video, image processing

@@ -2,18 +2,18 @@
   "statefulConfig": {
     "serviceName": "matrixai-server",
     "description": "MatrixAI Server",
-    "role": "acs:ram::5939539157604809:role/aliyunfcdefaultrole",
+    "role": "",
     "logConfig": {
-      "project": "matrixai-log-project",
-      "logstore": "fc-invocation-logs",
+      "project": "",
+      "logstore": "",
       "enableRequestMetrics": false,
       "enableInstanceMetrics": false,
       "logBeginRule": "None",
       "enableCustomExtraLog": true
     },
-    "serviceId": "c1c5229d-d16f-4085-8f5a-9a586bf24911",
-    "createdTime": "2025-07-07T06:15:53Z",
-    "lastModifiedTime": "2025-07-25T03:53:24Z",
+    "serviceId": "320549a4-9726-4b41-a4e5-60b1d26d0bfe",
+    "createdTime": "2025-07-24T19:19:58Z",
+    "lastModifiedTime": "2025-07-24T19:34:14Z",
     "vpcConfig": {
       "vpcId": "",
       "vSwitchIds": [],
@@ -40,6 +40,14 @@
     "name": "matrixai-server"
   },
   "statefulAutoConfig": {
-    "role": "acs:ram::5939539157604809:role/aliyunfcdefaultrole"
+    "role": "acs:ram::5939539157604809:role/aliyunfcdefaultrole",
+    "logConfig": {
+      "project": "5939539157604809-ap-southeast-1-logproject",
+      "logstore": "fc-service-matrixai-server-logstore",
+      "enableRequestMetrics": true,
+      "enableInstanceMetrics": true,
+      "logBeginRule": "DefaultRegex",
+      "enableCustomExtraLog": true
+    }
   }
 }

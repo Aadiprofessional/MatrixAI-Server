@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const { supabaseAdmin } = require('../utils/supabase');
+import jwt from 'jsonwebtoken';
+import { supabaseAdmin } from '../utils/supabase.js';
 
 /**
  * Middleware to authenticate user requests
@@ -71,6 +71,6 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-module.exports = {
+export {
   authenticateUser
 };

@@ -8,6 +8,9 @@ Resources:
       Description: 'MatrixAI Server - Modular Serverless Architecture'
       Role: 'acs:ram::5939539157604809:role/aliyunfcdefaultrole'
       InternetAccess: true
+      LogConfig:
+        Project: 'matrixai-log-project'
+        Logstore: 'fc-invocation-logs'
     
     main:
       Type: 'Aliyun::Serverless::Function'

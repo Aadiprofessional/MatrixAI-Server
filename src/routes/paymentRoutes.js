@@ -1,14 +1,14 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { 
+import { 
   getPaymentMethods,
   createPayment, 
   queryPaymentStatus, 
   cancelPayment, 
   handlePaymentNotification, 
   getPaymentHistory 
-} = require('../controllers/paymentController');
-const { authenticateUser } = require('../middleware/auth');
+} from '../controllers/paymentController.js';
+import { authenticateUser } from '../middleware/auth.js';
 
 // Get payment methods (no authentication required)
 router.get('/methods', getPaymentMethods);
@@ -28,4 +28,4 @@ router.post('/notify', handlePaymentNotification);
 // Get payment history (requires authentication)
 router.get('/history', authenticateUser, getPaymentHistory);
 
-module.exports = router;
+export default router;

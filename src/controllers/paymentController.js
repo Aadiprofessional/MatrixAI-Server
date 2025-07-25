@@ -1,5 +1,5 @@
-const AntomPaymentService = require('../services/antomPaymentService');
-const { supabaseAdmin } = require('../utils/supabase');
+import AntomPaymentService from '../services/antomPaymentService.js';
+import { supabaseAdmin } from '../utils/supabase.js';
 
 const antomService = new AntomPaymentService();
 
@@ -564,11 +564,11 @@ const processSuccessfulPayment = async (paymentRecord) => {
   }
 };
 
-module.exports = {
+export {
   getPaymentMethods,
   createPayment,
   queryPaymentStatus,
   cancelPayment,
   handlePaymentNotification,
   getPaymentHistory
-}; 
+};

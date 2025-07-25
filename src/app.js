@@ -3,12 +3,23 @@ import cors from 'cors';
 import audioRoutes from './routes/audioRoutes.js';
 import contentRoutes from './routes/contentRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
+import humanizeRoutes from './routes/humanizeRoutes.js';
 import imageRoutes from './routes/imageRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
 
 // Import payment routes (CommonJS module)
-const paymentRoutes = require('./routes/paymentRoutes');
+// Using dynamic import for CommonJS module
+let paymentRoutes;
+try {
+  // Use a dynamic import with .then() for the CommonJS module
+  const paymentRoutesModule = await import('./routes/paymentRoutes.js');
+  paymentRoutes = paymentRoutesModule.default;
+} catch (error) {
+  console.error('Error importing payment routes:', error);
+  // Fallback to empty router
+  paymentRoutes = express.Router();
+}
 
 const app = express();
 
@@ -29,6 +40,7 @@ const setupEnvironment = () => {
     DEEPGRAM_API_URL: 'https://api.deepgram.com/v1/listen',
     DEEPGRAM_API_KEY: '',
     DASHSCOPE_API_KEY: '',
+    RAPIDAPI_KEY: '',
     DASHSCOPEVIDEO_API_KEY: '',
     DASHSCOPEIMAGE_API_KEY: ''
   };
@@ -96,6 +108,7 @@ app.get('/api', (req, res) => {
     endpoints: {
       audio: '/api/audio/*',
       email: '/api/email/*',
+      humanize: '/api/humanize/*',
       payment: '/api/payment/*',
       health: '/health',
       debug: '/debug/env'
@@ -108,6 +121,7 @@ app.get('/api', (req, res) => {
 app.use('/api/audio', audioRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/email', emailRoutes);
+app.use('/api/humanize', humanizeRoutes);
 app.use('/api/image', imageRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/video', videoRoutes);
@@ -118,7 +132,7 @@ app.use('*', (req, res) => {
   res.status(404).json({ 
     error: 'Not Found',
     message: 'The requested endpoint does not exist',
-    availableEndpoints: ['/health', '/api', '/debug/env', '/api/audio/*', '/api/email/*', '/api/image/*', '/api/user/*', '/api/video/*', '/api/payment/*']
+    availableEndpoints: ['/health', '/api', '/debug/env', '/api/audio/*', '/api/email/*', '/api/humanize/*', '/api/image/*', '/api/user/*', '/api/video/*', '/api/payment/*']
   });
 });
 

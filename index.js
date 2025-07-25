@@ -255,7 +255,7 @@ export const handler = (req, resp, context) => {
         });
         
         // Ensure CORS headers are set
-        const allowedOrigins = ['http://localhost:3000', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'];
+        const allowedOrigins = ['http://localhost:3000','http://localhost:3001', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'];
         const origin = req.headers.origin;
         
         if (allowedOrigins.includes(origin)) {
@@ -281,7 +281,7 @@ export const handler = (req, resp, context) => {
       expressRes.status(200);
       
       // Use the same origin handling as in the end() method
-      const allowedOrigins = ['http://localhost:3000', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'];
+      const allowedOrigins = ['http://localhost:3000','http://localhost:3001', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'];
       const origin = req.headers.origin;
       
       if (allowedOrigins.includes(origin)) {

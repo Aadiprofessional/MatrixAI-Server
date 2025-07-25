@@ -745,7 +745,7 @@ router.all('/createImageFromUrl', async (req, res) => {
     }
 
     // Fixed coin cost for image enhancement
-    const coinCost = 3;
+    const coinCost = 10;
 
     console.log(`Creating enhanced image for user ${uid} from URL ${userImageUrl}`);
 

@@ -1,6 +1,6 @@
-const https = require("https");
-const crypto = require("crypto");
-const { v4: uuidv4 } = require('uuid');
+import https from 'https';
+import crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 class AntomPaymentService {
   constructor() {
@@ -314,4 +314,4 @@ MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCRkP6x7CxfD7gq+7QiDxGnoi6VfMuu
   }
 }
 
-module.exports = AntomPaymentService; 
+export default AntomPaymentService;

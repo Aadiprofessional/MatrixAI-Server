@@ -218,7 +218,7 @@ export const handler = async (req, resp, context) => {
     expressRes.req = expressReq;
     
     // Set default CORS headers
-    const allowedOrigins = ['http://localhost:3000', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com'];
+    const allowedOrigins = ['http://localhost:3000','http://localhost:3001', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com'];
     const origin = req.headers.origin;
     
     if (allowedOrigins.includes(origin)) {
