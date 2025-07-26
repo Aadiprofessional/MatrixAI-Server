@@ -11,7 +11,7 @@ const setupEnvironment = () => {
     SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4cHh2cW5ibWRkeHlkbm1jandmIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTc1MzA5NzYsImV4cCI6MjAxMzEwNjk3Nn0.Ib73YYSKQHm9z3MBXKYPBQXcBYZ3_3nF9tG5W0EvB-o',
     DEEPGRAM_API_URL: 'https://api.deepgram.com/v1/listen',
     DEEPGRAM_API_KEY: '4d8f9c5e9e5e9e5e9e5e9e5e9e5e9e5e9e5e9e5e',
-    DASHSCOPE_API_KEY: 'sk-1234567890abcdef1234567890abcdef',
+    DASHSCOPE_API_KEY: 'sk-e580e1af954e41a6a1e90f5adac47bc3',
     DASHSCOPEVIDEO_API_KEY: 'sk-4d8f9c5e9e5e9e5e9e5e9e5e9e5e9e5e9e5e9e5e',
     DASHSCOPEIMAGE_API_KEY: 'sk-4d8f9c5e9e5e9e5e9e5e9e5e9e5e9e5e9e5e9e5e',
     BASE_URL: 'https://main-matrixai-server-lujmidrakh.cn-hangzhou.fcapp.run'

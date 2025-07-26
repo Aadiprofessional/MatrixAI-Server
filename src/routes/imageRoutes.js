@@ -202,7 +202,7 @@ router.all('/createImage', async (req, res) => {
   console.log('SUPABASE_ANON_KEY exists:', !!process.env.SUPABASE_ANON_KEY);
   
   // Check if API key is valid
-  if (!process.env.DASHSCOPEIMAGE_API_KEY || process.env.DASHSCOPEIMAGE_API_KEY === 'sk-1234567890abcdef1234567890abcdef') {
+  if (!process.env.DASHSCOPEIMAGE_API_KEY || process.env.DASHSCOPEIMAGE_API_KEY === 'sk-e580e1af954e41a6a1e90f5adac47bc3') {
     console.error('Invalid or missing DashScope API key');
     return res.status(500).json({ 
       message: 'Image generation failed', 
@@ -726,7 +726,7 @@ router.all('/createImageFromUrl', async (req, res) => {
   console.log('SUPABASE_ANON_KEY exists:', !!process.env.SUPABASE_ANON_KEY);
   
   // Check if API key is valid
-  if (!process.env.DASHSCOPEIMAGE_API_KEY || process.env.DASHSCOPEIMAGE_API_KEY === 'sk-1234567890abcdef1234567890abcdef') {
+  if (!process.env.DASHSCOPEIMAGE_API_KEY || process.env.DASHSCOPEIMAGE_API_KEY === 'sk-e580e1af954e41a6a1e90f5adac47bc3') {
     console.error('Invalid or missing DashScope API key');
     return res.status(500).json({ 
       message: 'Image generation failed', 

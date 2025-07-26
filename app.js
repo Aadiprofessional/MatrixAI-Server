@@ -22,7 +22,7 @@ const setupEnvironment = () => {
     SUPABASE_SERVICE_ROLE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdGdkaGVoeGhnYXJrb252cGZxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNDY2ODgxMiwiZXhwIjoyMDUwMjQ0ODEyfQ.96FIL3jqf7QfnMITUkx5ze6t417VPkLFi83Su6Cgb7c',
     DEEPGRAM_API_URL: 'https://api.deepgram.com/v1/listen',
     DEEPGRAM_API_KEY: '45ef09cde6cad708abadbe83e5e9eff19f398427',
-    DASHSCOPE_API_KEY: 'sk-1234567890abcdef1234567890abcdef',
+    DASHSCOPE_API_KEY: 'sk-e580e1af954e41a6a1e90f5adac47bc3',
     DASHSCOPEVIDEO_API_KEY: 'sk-e580e1af954e41a6a1e90f5adac47bc3',
     DASHSCOPEIMAGE_API_KEY: 'sk-e580e1af954e41a6a1e90f5adac47bc3',
     RAPIDAPI_KEY: 'ded161a4bbmsh97e7e2c341abd29p1e8fa4jsn56149c4f8718',
@@ -53,8 +53,8 @@ app.use(cors({
 
 // Handle OPTIONS requests explicitly
 app.options('*', cors());
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
