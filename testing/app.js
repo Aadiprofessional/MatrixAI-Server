@@ -38,7 +38,8 @@ const corsOptions = {
     }
     
     const allowedOrigins = [
-      'http://localhost:3000',
+      'http://localhost:3000', 
+      'https://matrix-4hv.pages.dev',
       'http://localhost:3001',
       'http://localhost:3002',
       'http://127.0.0.1:3000',
@@ -114,7 +115,8 @@ app.use((req, res, next) => {
   // Set CORS headers manually as backup
   if (origin) {
     const allowedOrigins = [
-      'http://localhost:3000',
+      'http://localhost:3000', 
+      'https://matrix-4hv.pages.dev',
       'http://localhost:3001',
       'http://localhost:3002',
       'http://127.0.0.1:3000',

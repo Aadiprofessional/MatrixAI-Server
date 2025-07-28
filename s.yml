@@ -50,7 +50,7 @@ services:
               - DELETE
               - OPTIONS
             cors:
-              allowCredentials: false
+              allowCredentials: true
               allowHeaders:
                 - Content-Type
                 - Authorization
@@ -62,7 +62,12 @@ services:
                 - DELETE
                 - OPTIONS
               allowOrigins:
-                - '*'
+                - 'http://localhost:3000'
+                - 'https://matrix-4hv.pages.dev'
+                - 'http://localhost:3001'
+                - 'https://matrixaiglobal.com'
+                - 'https://www.matrixaiglobal.com'
+                - 'https://matrixai.asia'
               exposeHeaders:
                 - Content-Length
                 - Content-Type

@@ -7,6 +7,7 @@ import humanizeRoutes from './routes/humanizeRoutes.js';
 import imageRoutes from './routes/imageRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 // Import payment routes (CommonJS module)
 // Using dynamic import for CommonJS module
@@ -56,18 +57,20 @@ const setupEnvironment = () => {
 // Initialize environment
 setupEnvironment();
 
-// Middleware
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://matrixai.asia', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com'],
+// Middleware - Single CORS configuration to prevent duplicate headers
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://matrix-4hv.pages.dev', 'https://matrixai.asia', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-API-Key'],
   credentials: true,
   preflightContinue: false,
   optionsSuccessStatus: 204
-}));
+};
 
-// Handle OPTIONS requests explicitly
-app.options('*', cors());
+app.use(cors(corsOptions));
+
+// Handle OPTIONS requests explicitly with the same corsOptions
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -110,6 +113,7 @@ app.get('/api', (req, res) => {
       email: '/api/email/*',
       humanize: '/api/humanize/*',
       payment: '/api/payment/*',
+      admin: '/api/admin/*',
       health: '/health',
       debug: '/debug/env'
     },
@@ -126,13 +130,14 @@ app.use('/api/image', imageRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/video', videoRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
   res.status(404).json({ 
     error: 'Not Found',
     message: 'The requested endpoint does not exist',
-    availableEndpoints: ['/health', '/api', '/debug/env', '/api/audio/*', '/api/email/*', '/api/humanize/*', '/api/image/*', '/api/user/*', '/api/video/*', '/api/payment/*']
+    availableEndpoints: ['/health', '/api', '/debug/env', '/api/audio/*', '/api/email/*', '/api/humanize/*', '/api/image/*', '/api/user/*', '/api/video/*', '/api/payment/*', '/api/admin/*']
   });
 });
 

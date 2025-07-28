@@ -781,7 +781,7 @@ router.all('/BuySubscription', async (req, res) => {
       };
       
       // Send email using the email API
-      const emailResponse = await fetch(`${process.env.API_URL || 'http://localhost:3000'}/api/email/send`, {
+      const emailResponse = await fetch(`${process.env.API_URL || 'http://localhost:3000', 'https://matrix-4hv.pages.dev'}/api/email/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

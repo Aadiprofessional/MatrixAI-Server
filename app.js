@@ -41,18 +41,20 @@ setupEnvironment();
 
 const app = express();
 
-// Middleware
-app.use(cors({
-  origin: ['http://localhost:3000','http://localhost:3001', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia' ],
+// Middleware - Single CORS configuration to prevent duplicate headers
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://matrix-4hv.pages.dev', 'http://localhost:3001', 'http://localhost:3002', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-API-Key'],
   credentials: true,
   preflightContinue: false,
   optionsSuccessStatus: 204
-}));
+};
 
-// Handle OPTIONS requests explicitly
-app.options('*', cors());
+app.use(cors(corsOptions));
+
+// Handle OPTIONS requests explicitly with the same corsOptions
+app.options('*', cors(corsOptions));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 

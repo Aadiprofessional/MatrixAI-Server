@@ -39,10 +39,10 @@ Resources:
               AuthType: ANONYMOUS
               Methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
               Cors:
-                AllowCredentials: false
+                AllowCredentials: true
                 AllowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
                 AllowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-                AllowOrigins: ['*']
+                AllowOrigins: ['http://localhost:3000', 'https://matrix-4hv.pages.dev', 'http://localhost:3001', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia']
                 ExposeHeaders: ['Content-Length', 'Content-Type']
                 MaxAge: 86400
     

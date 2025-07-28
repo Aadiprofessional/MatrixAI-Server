@@ -6,6 +6,7 @@ import axios from 'axios';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import fetch from 'node-fetch';
 
 // Configure multer for memory storage
 const storage = multer.memoryStorage();
@@ -73,9 +74,12 @@ const pollVideoStatus = async (taskId, maxAttempts = 60, interval = 10000, initi
       // Check if the task is completed
       if (result.output && result.output.video_url) {
         console.log(`Video generation completed for task ID: ${taskId}`);
+        // Clean the URL - remove any backticks or extra spaces
+        const cleanVideoUrl = result.output.video_url.replace(/[\s`]/g, '');
+        console.log(`Cleaned video URL: ${cleanVideoUrl}`);
         return {
           success: true,
-          videoUrl: result.output.video_url,
+          videoUrl: cleanVideoUrl,
           taskStatus: result.status,
           requestId: result.request_id,
           submitTime: result.submit_time,
@@ -193,39 +197,140 @@ router.all('/getVideoHistory', async (req, res) => {
     const from = (page - 1) * itemsPerPage;
     const to = from + itemsPerPage - 1;
     
-    const supabase = getSupabaseClient();
+    let supabase;
+    try {
+      supabase = getSupabaseClient();
+    } catch (clientError) {
+      console.error('Error initializing Supabase client:', clientError);
+      return res.status(500).json({ 
+        error: 'Failed to initialize database connection', 
+        details: clientError.message,
+        hint: 'Check Supabase environment variables and configuration'
+      });
+    }
     
     // Get total count for pagination
-    const { count, error: countError } = await supabase
-      .from('video_metadata')
-      .select('*', { count: 'exact', head: true })
-      .eq('uid', uid);
-    
-    if (countError) {
-      console.error('Error counting videos:', countError);
-      return res.status(500).json({ error: 'Failed to count videos', details: countError.message });
+    let count = 0;
+    try {
+      const countResult = await supabase
+        .from('video_metadata')
+        .select('*', { count: 'exact', head: true })
+        .eq('uid', uid);
+      
+      if (countResult.error) {
+        console.error('Error counting videos:', countResult.error);
+        // Continue with count=0 instead of returning error to allow partial functionality
+        console.log('Continuing with count=0');
+      } else {
+        count = countResult.count || 0;
+      }
+    } catch (fetchError) {
+      console.error('Network error during video count:', fetchError);
+      // Continue with count=0 instead of returning error to allow partial functionality
+      console.log('Continuing with count=0 after network error');
     }
     
     // Get paginated data
-    const { data: videos, error } = await supabase
-      .from('video_metadata')
-      .select('*')
-      .eq('uid', uid)
-      .order('created_at', { ascending: false })
-      .range(from, to);
-    
-    if (error) {
-      console.error('Error fetching videos:', error);
-      return res.status(500).json({ error: 'Failed to fetch videos', details: error.message });
+    let videos = [];
+    try {
+      const result = await supabase
+        .from('video_metadata')
+        .select('*')
+        .eq('uid', uid)
+        .order('created_at', { ascending: false }) // Latest videos first
+        .range(from, to);
+      
+      if (result.error) {
+        console.error('Error fetching videos:', result.error);
+        return res.status(500).json({ error: 'Failed to fetch videos', details: result.error.message });
+      }
+      
+      videos = result.data || [];
+    } catch (fetchError) {
+      console.error('Network error during video fetch:', fetchError);
+      return res.status(500).json({ error: 'Network error during video fetch', details: fetchError.message });
     }
+    
+    // Check for videos with missing video_url but have task_id
+    let updatedVideos = [];
+    try {
+      updatedVideos = await Promise.all(videos.map(async (video) => {
+        // If video is in processing state, has a task_id, but no video_url, check its status
+        if (video.status === 'processing' && video.task_id && !video.video_url) {
+          console.log(`Checking status for video ${video.video_id} with task ID ${video.task_id}`);
+          try {
+            // Use a single polling attempt with no initial delay
+            const pollResult = await pollVideoStatus(video.task_id, 1, 5000, 0);
+            
+            if (pollResult.success) {
+              console.log(`Video generation completed for task ID: ${video.task_id}`);
+              
+              try {
+                // Update the database with the video URL
+                const { error: updateError } = await supabase
+                  .from('video_metadata')
+                  .update({
+                    video_url: pollResult.videoUrl,
+                    status: 'completed',
+                    task_status: pollResult.taskStatus,
+                    request_id: pollResult.requestId,
+                    submit_time: pollResult.submitTime,
+                    scheduled_time: pollResult.scheduledTime,
+                    end_time: pollResult.endTime,
+                    updated_at: new Date().toISOString()
+                  })
+                  .eq('video_id', video.video_id);
+                
+                if (updateError) {
+                  console.error(`Error updating video ${video.video_id}:`, updateError);
+                } else {
+                  // Update the video object in memory
+                  return {
+                    ...video,
+                    video_url: pollResult.videoUrl,
+                    status: 'completed',
+                    task_status: pollResult.taskStatus,
+                    request_id: pollResult.requestId,
+                    submit_time: pollResult.submitTime,
+                    scheduled_time: pollResult.scheduledTime,
+                    end_time: pollResult.endTime,
+                    updated_at: new Date().toISOString()
+                  };
+                }
+              } catch (dbError) {
+                console.error(`Database error updating video ${video.video_id}:`, dbError);
+              }
+            }
+          } catch (pollError) {
+            console.error(`Error polling for video ${video.video_id}:`, pollError);
+          }
+        }
+        return video;
+      }));
+    } catch (processingError) {
+      console.error('Error processing videos:', processingError);
+      // Continue with the original videos if there's an error in processing
+      updatedVideos = videos;
+    }
+    
+    // Calculate total pages and ensure it's at least 1 (even if count is 0)
+    const totalPages = Math.max(1, Math.ceil(count / itemsPerPage));
     
     return res.status(200).json({
       message: 'Video history retrieved successfully',
-      videos,
+      videos: updatedVideos,
       totalItems: count,
       currentPage: page,
       itemsPerPage,
-      totalPages: Math.ceil(count / itemsPerPage)
+      totalPages: totalPages,
+      pagination: {
+        totalItems: count,
+        totalPages: totalPages,
+        currentPage: page,
+        itemsPerPage: itemsPerPage,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1
+      }
     });
   } catch (error) {
     console.error('Error in getVideoHistory:', error);
@@ -254,7 +359,7 @@ router.all('/removeVideo', async (req, res) => {
     const { data: video, error: fetchError } = await supabase
       .from('video_metadata')
       .select('*')
-      .eq('id', videoId)
+      .eq('video_id', videoId)
       .eq('uid', uid)
       .single();
     
@@ -267,7 +372,7 @@ router.all('/removeVideo', async (req, res) => {
     const { error: deleteError } = await supabase
       .from('video_metadata')
       .delete()
-      .eq('id', videoId)
+      .eq('video_id', videoId)
       .eq('uid', uid);
     
     if (deleteError) {
@@ -304,7 +409,7 @@ router.post('/createVideo', upload.single('image'), async (req, res) => {
   const promptText = req.body.promptText || req.query.promptText || "";
   const imageUrl = req.body.imageUrl || req.query.imageUrl; // For URL-based image inputs
   const template = req.body.template || req.query.template;
-  const size = req.body.size || req.query.size || '720P';
+  const size = '720P';
   
   try {
     if (!uid) {
@@ -374,7 +479,7 @@ router.post('/createVideo', upload.single('image'), async (req, res) => {
           prompt: promptText 
         }, 
         parameters: { 
-          size: size 
+          size: '1280*720'
         } 
       };
       
@@ -589,13 +694,21 @@ router.post('/createVideo', upload.single('image'), async (req, res) => {
       }
       
       // Start polling in the background and wait for result
-      const pollResult = await pollVideoStatus(taskId);
+      // Use a 40 second initial delay for text-to-video requests, standard delay for others
+      const initialDelay = requestBody.model === "wanx2.1-t2v-turbo" ? 40000 : 120000;
+      let pollResult = await pollVideoStatus(taskId, 60, 10000, initialDelay);
+      
+      // Ensure videoUrl is clean (no backticks or spaces)
+      if (pollResult.videoUrl) {
+        pollResult.videoUrl = pollResult.videoUrl.replace(/[\s`]/g, '');
+      }
+      
       console.log('Polling completed:', pollResult);
       
       try {
         if (pollResult.success) {
-          // Clean the URL - remove any backticks or extra spaces
-          const cleanVideoUrl = pollResult.videoUrl.replace(/[\s`]/g, '');
+          // URL is already cleaned in the previous step
+          const cleanVideoUrl = pollResult.videoUrl;
           console.log('Attempting to download video from URL:', cleanVideoUrl);
           
           // Download the video from the URL with retry logic
@@ -649,20 +762,62 @@ router.post('/createVideo', upload.single('image'), async (req, res) => {
           
           if (uploadError) {
             console.error('Error uploading video to storage:', uploadError);
-            // Still save the original URL if storage upload fails
-            await supabase
-              .from('video_metadata')
-              .update({
-                video_url: pollResult.videoUrl,
-                status: 'completed',
-                task_status: pollResult.taskStatus,
-                request_id: pollResult.requestId,
-                submit_time: pollResult.submitTime,
-                scheduled_time: pollResult.scheduledTime,
-                end_time: pollResult.endTime,
-                updated_at: new Date().toISOString()
-              })
-              .eq('video_id', videoId);
+            // Retry upload once more with a different filename
+            const retryFileName = `${uid}/${uuidv4()}_retry.mp4`;
+            const retryFilePath = `videos/${retryFileName}`;
+            
+            const { data: retryUploadData, error: retryUploadError } = await supabase.storage
+              .from('user-uploads')
+              .upload(retryFilePath, videoBuffer, {
+                contentType: 'video/mp4',
+                cacheControl: '3600',
+                upsert: false
+              });
+              
+            if (retryUploadError) {
+              console.error('Error on retry upload to storage:', retryUploadError);
+              // Only as a last resort, save the cleaned URL if both upload attempts fail
+              await supabase
+                .from('video_metadata')
+                .update({
+                  video_url: cleanVideoUrl, // Use the cleaned URL
+                  status: 'completed',
+                  task_status: pollResult.taskStatus,
+                  request_id: pollResult.requestId,
+                  submit_time: pollResult.submitTime,
+                  scheduled_time: pollResult.scheduledTime,
+                  end_time: pollResult.endTime,
+                  updated_at: new Date().toISOString(),
+                  error_message: 'Storage upload failed, using temporary URL'
+                })
+                .eq('video_id', videoId);
+            } else {
+              // Get public URL for the retry uploaded video
+              const { data: retryUrlData } = supabase.storage
+                .from('user-uploads')
+                .getPublicUrl(retryFilePath);
+              
+              // Assign to the higher scope variable
+              urlData = retryUrlData;
+              
+              // Update database with the Supabase storage URL from retry
+              await supabase
+                .from('video_metadata')
+                .update({
+                  video_url: retryUrlData.publicUrl,
+                  video_path: retryFilePath,
+                  file_path: retryFilePath, // Also update file_path field
+                  original_video_url: cleanVideoUrl, // Use cleaned URL
+                  status: 'completed',
+                  task_status: pollResult.taskStatus,
+                  request_id: pollResult.requestId,
+                  submit_time: pollResult.submitTime,
+                  scheduled_time: pollResult.scheduledTime,
+                  end_time: pollResult.endTime,
+                  updated_at: new Date().toISOString()
+                })
+                .eq('video_id', videoId);
+            }
           } else {
             // Get public URL for the uploaded video
             const { data } = supabase.storage
@@ -678,7 +833,8 @@ router.post('/createVideo', upload.single('image'), async (req, res) => {
               .update({
                 video_url: urlData.publicUrl,
                 video_path: videoFilePath,
-                original_video_url: pollResult.videoUrl,
+                file_path: videoFilePath, // Also update file_path field
+                original_video_url: cleanVideoUrl, // Use cleaned URL
                 status: 'completed',
                 task_status: pollResult.taskStatus,
                 request_id: pollResult.requestId,
@@ -698,7 +854,7 @@ router.post('/createVideo', upload.single('image'), async (req, res) => {
             message: 'Video generation completed',
             videoId,
             status: 'completed',
-            videoUrl: uploadError ? pollResult.videoUrl : (urlData ? urlData.publicUrl : pollResult.videoUrl)
+            videoUrl: urlData ? urlData.publicUrl : cleanVideoUrl // Always use cleaned URL as fallback
           });
         } else {
           // Update database with failed status

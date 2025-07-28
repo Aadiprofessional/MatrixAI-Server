@@ -110,8 +110,8 @@ const createPayment = async (req, res) => {
       paymentMethodType,
       orderDescription: orderDescription || (plan ? `Subscription: ${plan.name}` : addon ? `Addon: ${addon.name}` : 'EduSmart Payment'),
       userId: userId,
-      notifyUrl: notifyUrl || `${process.env.BASE_URL || 'http://localhost:3000'}/api/payment/notify`,
-      redirectUrl: redirectUrl || `${process.env.BASE_URL || 'http://localhost:3000'}/payment/success`
+      notifyUrl: notifyUrl || `${process.env.BASE_URL || 'http://localhost:3000', 'https://matrix-4hv.pages.dev'}/api/payment/notify`,
+      redirectUrl: redirectUrl || `${process.env.BASE_URL || 'http://localhost:3000', 'https://matrix-4hv.pages.dev'}/payment/success`
     };
 
     console.log('Creating Antom payment:', paymentData);

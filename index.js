@@ -254,22 +254,32 @@ export const handler = (req, resp, context) => {
           }
         });
         
-        // Ensure CORS headers are set
-        const allowedOrigins = ['http://localhost:3000','http://localhost:3001', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'];
-        const origin = req.headers.origin;
-        
-        if (allowedOrigins.includes(origin)) {
-          resp.setHeader('Access-Control-Allow-Origin', origin);
-        } else {
-          // Always set a default origin if none matched
-          resp.setHeader('Access-Control-Allow-Origin', 'https://matrixaiglobal.com');
+        // Only set CORS headers if they haven't been set by Express middleware
+        if (!this.getHeader('access-control-allow-origin')) {
+          const allowedOrigins = ['http://localhost:3000', 'https://matrix-4hv.pages.dev', 'http://localhost:3001', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'];
+          const origin = req.headers.origin;
+          
+          if (allowedOrigins.includes(origin)) {
+            resp.setHeader('Access-Control-Allow-Origin', origin);
+          } else {
+            // Always set a default origin if none matched
+            resp.setHeader('Access-Control-Allow-Origin', 'https://matrix-4hv.pages.dev');
+          }
+          
+          // Set CORS headers only if they haven't been set already
+          if (!this.getHeader('access-control-allow-methods')) {
+            resp.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+          }
+          if (!this.getHeader('access-control-allow-headers')) {
+            resp.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-API-Key');
+          }
+          if (!this.getHeader('access-control-allow-credentials')) {
+            resp.setHeader('Access-Control-Allow-Credentials', 'true');
+          }
+          if (!this.getHeader('access-control-max-age')) {
+            resp.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
+          }
         }
-        
-        // Always set CORS headers
-        resp.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        resp.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-        resp.setHeader('Access-Control-Allow-Credentials', 'true');
-        resp.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
         
         resp.send(this.body || '');
         return this;
@@ -280,21 +290,33 @@ export const handler = (req, resp, context) => {
     if (req.method === 'OPTIONS') {
       expressRes.status(200);
       
-      // Use the same origin handling as in the end() method
-      const allowedOrigins = ['http://localhost:3000','http://localhost:3001', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'];
-      const origin = req.headers.origin;
-      
-      if (allowedOrigins.includes(origin)) {
-        expressRes.setHeader('Access-Control-Allow-Origin', origin);
-      } else {
-        // Always set a default origin if none matched
-        expressRes.setHeader('Access-Control-Allow-Origin', 'https://matrixaiglobal.com');
+      // Only set CORS headers if they haven't been set by Express middleware
+      if (!expressRes.getHeader('access-control-allow-origin')) {
+        // Use the same origin handling as in the end() method
+        const allowedOrigins = ['http://localhost:3000', 'https://matrix-4hv.pages.dev','http://localhost:3001', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'];
+        const origin = req.headers.origin;
+        
+        if (allowedOrigins.includes(origin)) {
+          expressRes.setHeader('Access-Control-Allow-Origin', origin);
+        } else {
+          // Always set a default origin if none matched
+          expressRes.setHeader('Access-Control-Allow-Origin', 'https://matrix-4hv.pages.dev');
+        }
+        
+        // Set CORS headers only if they haven't been set already
+        if (!expressRes.getHeader('access-control-allow-methods')) {
+          expressRes.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        }
+        if (!expressRes.getHeader('access-control-allow-headers')) {
+          expressRes.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-API-Key');
+        }
+        if (!expressRes.getHeader('access-control-allow-credentials')) {
+          expressRes.setHeader('Access-Control-Allow-Credentials', 'true');
+        }
+        if (!expressRes.getHeader('access-control-max-age')) {
+          expressRes.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
+        }
       }
-      
-      expressRes.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-      expressRes.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-      expressRes.setHeader('Access-Control-Allow-Credentials', 'true');
-      expressRes.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
       expressRes.end();
       return;
     }
