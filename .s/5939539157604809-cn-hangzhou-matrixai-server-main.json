@@ -8,8 +8,8 @@
     "timeout": 900,
     "initializer": "",
     "initializationTimeout": 3,
-    "codeSize": 32512959,
-    "codeChecksum": "1231033614712047347",
+    "codeSize": 32519045,
+    "codeChecksum": "14431989285566960942",
     "memorySize": 1024,
     "gpuMemorySize": null,
     "environmentVariables": {
@@ -17,7 +17,7 @@
       "NODE_ENV": "production"
     },
     "createdTime": "2025-07-07T06:16:41Z",
-    "lastModifiedTime": "2025-07-28T00:52:13Z",
+    "lastModifiedTime": "2025-07-29T22:58:25Z",
     "instanceConcurrency": 1,
     "instanceSoftConcurrency": null,
     "customContainerConfig": null,

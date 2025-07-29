@@ -57,7 +57,9 @@ const setupEnvironment = () => {
 // Initialize environment
 setupEnvironment();
 
-// Middleware - Single CORS configuration to prevent duplicate headers
+// Disable CORS middleware in Express since we're handling it at the serverless layer
+// This prevents duplicate CORS headers
+// We'll keep the configuration here for reference
 const corsOptions = {
   origin: ['http://localhost:3000', 'https://matrix-4hv.pages.dev', 'https://matrixai.asia', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -67,10 +69,9 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-app.use(cors(corsOptions));
-
-// Handle OPTIONS requests explicitly with the same corsOptions
-app.options('*', cors(corsOptions));
+// CORS is now handled at the serverless layer (handler.js, serverless.js, index.js)
+// app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));

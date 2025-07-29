@@ -130,7 +130,7 @@ const pollImageGeneration = async (taskId, imageId, uid, maxAttempts = 30, delay
       const response = await fetch(`https://dashscope.aliyuncs.com/api/v1/tasks/${taskId}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${process.env.DASHSCOPEIMAGE_API_KEY}`,
+          'Authorization': `Bearer ${process.env.DASHSCOPE_API_KEY}`,
           'Content-Type': 'application/json'
         }
       });
@@ -196,13 +196,13 @@ router.all('/createImage', async (req, res) => {
   console.log('Request body:', req.body);
   console.log('Request query:', req.query);
   console.log('Environment variables check:');
-  console.log('DASHSCOPEIMAGE_API_KEY exists:', !!process.env.DASHSCOPEIMAGE_API_KEY);
-  console.log('DASHSCOPEIMAGE_API_KEY first 5 chars:', process.env.DASHSCOPEIMAGE_API_KEY ? process.env.DASHSCOPEIMAGE_API_KEY.substring(0, 5) : 'none');
+  console.log('DASHSCOPE_API_KEY exists:', !!process.env.DASHSCOPE_API_KEY);
+  console.log('DASHSCOPE_API_KEY first 5 chars:', process.env.DASHSCOPE_API_KEY ? process.env.DASHSCOPE_API_KEY.substring(0, 5) : 'none');
   console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
   console.log('SUPABASE_ANON_KEY exists:', !!process.env.SUPABASE_ANON_KEY);
   
   // Check if API key is valid
-  if (!process.env.DASHSCOPEIMAGE_API_KEY || process.env.DASHSCOPEIMAGE_API_KEY === 'sk-e580e1af954e41a6a1e90f5adac47bc3') {
+  if (!process.env.DASHSCOPE_API_KEY || process.env.DASHSCOPE_API_KEY === 'sk-e580e1af954e41a6a1e90f5adac47bc3') {
     console.error('Invalid or missing DashScope API key');
     return res.status(500).json({ 
       message: 'Image generation failed', 
@@ -271,7 +271,7 @@ router.all('/createImage', async (req, res) => {
       const response = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.DASHSCOPEIMAGE_API_KEY}`,
+          'Authorization': `Bearer ${process.env.DASHSCOPE_API_KEY}`,
           'Content-Type': 'application/json',
           'X-DashScope-Async': 'enable'
         },
@@ -347,7 +347,7 @@ router.all('/createImage', async (req, res) => {
         try {
           const statusResponse = await fetch(`https://dashscope.aliyuncs.com/api/v1/tasks/${taskId}`, {
             headers: {
-              'Authorization': `Bearer ${process.env.DASHSCOPEIMAGE_API_KEY}`
+              'Authorization': `Bearer ${process.env.DASHSCOPE_API_KEY}`
             }
           });
 
@@ -720,13 +720,13 @@ router.all('/createImageFromUrl', async (req, res) => {
   console.log('Request body:', req.body);
   console.log('Request query:', req.query);
   console.log('Environment variables check:');
-  console.log('DASHSCOPEIMAGE_API_KEY exists:', !!process.env.DASHSCOPEIMAGE_API_KEY);
-  console.log('DASHSCOPEIMAGE_API_KEY first 5 chars:', process.env.DASHSCOPEIMAGE_API_KEY ? process.env.DASHSCOPEIMAGE_API_KEY.substring(0, 5) : 'none');
+  console.log('DASHSCOPE_API_KEY exists:', !!process.env.DASHSCOPE_API_KEY);
+  console.log('DASHSCOPE_API_KEY first 5 chars:', process.env.DASHSCOPE_API_KEY ? process.env.DASHSCOPE_API_KEY.substring(0, 5) : 'none');
   console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
   console.log('SUPABASE_ANON_KEY exists:', !!process.env.SUPABASE_ANON_KEY);
   
   // Check if API key is valid
-  if (!process.env.DASHSCOPEIMAGE_API_KEY || process.env.DASHSCOPEIMAGE_API_KEY === 'sk-e580e1af954e41a6a1e90f5adac47bc3') {
+  if (!process.env.DASHSCOPE_API_KEY || process.env.DASHSCOPE_API_KEY === 'sk-e580e1af954e41a6a1e90f5adac47bc3') {
     console.error('Invalid or missing DashScope API key');
     return res.status(500).json({ 
       message: 'Image generation failed', 

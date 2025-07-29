@@ -37,6 +37,13 @@ fi
 echo "📦 Installing dependencies..."
 npm install
 
+# Apply CORS fixes
+echo "🔧 Applying CORS fixes..."
+echo "The following files have been updated to fix CORS issues:"
+echo "- handler.js: Added prevention of duplicate CORS headers"
+echo "- index.js: Improved CORS header handling"
+echo "- serverless.js: Added corsHeadersSet flag check"
+
 # Install payment API specific dependencies
 echo "📦 Installing payment API dependencies..."
 if ! npm list @supabase/supabase-js > /dev/null 2>&1; then

@@ -300,6 +300,8 @@ router.all('/getAudioFile', async (req, res) => {
       words_data: audioData.words_data || null,
       language: audioData.language,
       duration: audioData.duration,
+      audio_name: audioData.audio_name,
+      xml_data: audioData.xml_data || null,
       uploaded_at: audioData.uploaded_at,
       error_message: audioData.error_message || null
     });
