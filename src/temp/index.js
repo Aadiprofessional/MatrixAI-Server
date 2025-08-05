@@ -1,5 +1,6 @@
-import { getSupabaseClient } from '../config/database.js';
-import { v4 as uuidv4 } from 'uuid';
+const { getSupabaseClient } = require('../config/database.js');
+const uuid = require('uuid');
+const uuidv4 = uuid.v4;
 
 // Set up environment variables with fallback configuration
 const setupEnvironment = () => {

@@ -1,8 +1,9 @@
 // detectionRoutes.js
-import express from 'express';
-import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-import { createClient } from '@supabase/supabase-js';
+const express = require('express');
+const axios = require('axios');
+const uuid = require('uuid');
+const uuidv4 = uuid.v4;
+const { createClient } = require('@supabase/supabase-js');
 
 const router = express.Router();
 
@@ -33,7 +34,7 @@ const deductCoins = async (uid, coinAmount, transactionName) => {
 router.post('/createDetection', async (req, res) => {
   try {
     const {
-      uid, text, title = 'Untitled', tags = [], coinCost = 5,
+      uid, text, title = 'Untitled', tags = [], coinCost = 40,
       language = 'en'
     } = req.body;
 
@@ -320,4 +321,4 @@ router.delete('/deleteDetection', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

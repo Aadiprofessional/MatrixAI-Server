@@ -1,6 +1,6 @@
-import express from 'express';
-import { getSupabaseClient } from '../config/database.js';
-import { v4 as uuidv4 } from 'uuid';
+const express = require("express");
+const { getSupabaseClient } = require("../config/database.js");
+const { v4: uuidv4 } = require("uuid");
 
 const router = express.Router();
 
@@ -85,7 +85,7 @@ router.post('/saveContent', async (req, res) => {
       content, 
       title = 'Untitled Content', 
       tags = [], 
-      coinCost = 10,
+      coinCost = 3,
       content_type,
       tone,
       language = 'en'
@@ -576,4 +576,4 @@ router.get('/shared/:shareId', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

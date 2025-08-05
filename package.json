@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "MatrixAI Server with audio, video, and image processing capabilities",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",

@@ -1,8 +1,9 @@
 // humanizeRoutes.js
-import express from 'express';
-import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-import { createClient } from '@supabase/supabase-js';
+const express = require("express");
+const axios = require("axios");
+const uuid = require("uuid");
+const uuidv4 = uuid.v4;
+const { createClient } = require("@supabase/supabase-js");
 
 const router = express.Router();
 
@@ -41,7 +42,7 @@ const supportedDetectors = [
 router.post('/createHumanization', async (req, res) => {
   try {
     const {
-      uid, prompt, title = 'Untitled', tags = [], coinCost = 10,
+      uid, prompt, title = 'Untitled', tags = [], coinCost = 40,
       language = 'en', stealth = 0.9, ai_detector = 'Universal Mode (Beta)'
     } = req.body;
 
@@ -339,4 +340,4 @@ router.delete('/deleteHumanization', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

@@ -1,9 +1,9 @@
 // Import app and Readable stream for request handling
-import app from './app.js';
-import { Readable } from 'stream';
+const app = require('./src/app.js');
+const { Readable } = require('stream');
 
 // HTTP handler for Alibaba Cloud Function Compute
-export const handler = (req, resp, context) => {
+const handler = (req, resp, context) => {
   console.log('HTTP Handler called');
   console.log('Request method:', req.method);
   console.log('Request path:', req.path);
@@ -358,3 +358,7 @@ if (process.env.NODE_ENV !== 'production') {
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   });
 }
+
+// Export handler for Function Compute
+module.exports = handler;
+module.exports.handler = handler;

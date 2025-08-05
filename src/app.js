@@ -1,21 +1,20 @@
-import express from 'express';
-import cors from 'cors';
-import audioRoutes from './routes/audioRoutes.js';
-import contentRoutes from './routes/contentRoutes.js';
-import emailRoutes from './routes/emailRoutes.js';
-import humanizeRoutes from './routes/humanizeRoutes.js';
-import imageRoutes from './routes/imageRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import videoRoutes from './routes/videoRoutes.js';
-import adminRoutes from './routes/adminRoutes.js';
+const express = require('express');
+const cors = require('cors');
+const audioRoutes = require('./routes/audioRoutes.js');
+const contentRoutes = require('./routes/contentRoutes.js');
+const emailRoutes = require('./routes/emailRoutes.js');
+const humanizeRoutes = require('./routes/humanizeRoutes.js');
+const imageRoutes = require('./routes/imageRoutes.js');
+const userRoutes = require('./routes/userRoutes.js');
+const videoRoutes = require('./routes/videoRoutes.js');
+const adminRoutes = require('./routes/adminRoutes.js');
+const detectionRoutes = require('./routes/detectionRoutes.js');
+const presentationRoutes = require('./routes/presentationRoutes.js');
 
-// Import payment routes (CommonJS module)
-// Using dynamic import for CommonJS module
+// Import payment routes
 let paymentRoutes;
 try {
-  // Use a dynamic import with .then() for the CommonJS module
-  const paymentRoutesModule = await import('./routes/paymentRoutes.js');
-  paymentRoutes = paymentRoutesModule.default;
+  paymentRoutes = require('./routes/paymentRoutes.js');
 } catch (error) {
   console.error('Error importing payment routes:', error);
   // Fallback to empty router
@@ -62,16 +61,16 @@ setupEnvironment();
 // We'll keep the configuration here for reference
 const corsOptions = {
   origin: ['http://localhost:3000', 'https://matrix-4hv.pages.dev', 'https://matrixai.asia', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-API-Key'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-API-Key', 'Accept', 'Origin', 'Cache-Control'],
   credentials: true,
   preflightContinue: false,
   optionsSuccessStatus: 204
 };
 
-// CORS is now handled at the serverless layer (handler.js, serverless.js, index.js)
-// app.use(cors(corsOptions));
-// app.options('*', cors(corsOptions));
+// Enable CORS middleware
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -115,6 +114,7 @@ app.get('/api', (req, res) => {
       humanize: '/api/humanize/*',
       payment: '/api/payment/*',
       admin: '/api/admin/*',
+      detection: '/api/detection/*',
       health: '/health',
       debug: '/debug/env'
     },
@@ -132,13 +132,15 @@ app.use('/api/user', userRoutes);
 app.use('/api/video', videoRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/detection', detectionRoutes);
+app.use('/api/presentation', presentationRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
   res.status(404).json({ 
     error: 'Not Found',
     message: 'The requested endpoint does not exist',
-    availableEndpoints: ['/health', '/api', '/debug/env', '/api/audio/*', '/api/email/*', '/api/humanize/*', '/api/image/*', '/api/user/*', '/api/video/*', '/api/payment/*', '/api/admin/*']
+    availableEndpoints: ['/health', '/api', '/debug/env', '/api/audio/*', '/api/email/*', '/api/humanize/*', '/api/image/*', '/api/user/*', '/api/video/*', '/api/payment/*', '/api/admin/*', '/api/detection/*']
   });
 });
 
@@ -152,4 +154,4 @@ app.use((error, req, res, next) => {
   });
 });
 
-export default app;
+module.exports = app;

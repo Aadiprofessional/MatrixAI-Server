@@ -1,5 +1,5 @@
-import express from 'express';
-import { getSupabaseClient } from '../config/database.js';
+const express = require("express");
+const { getSupabaseClient } = require("../config/database.js");
 
 const router = express.Router();
 
@@ -1063,4 +1063,4 @@ router.all('/submitFeedback', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

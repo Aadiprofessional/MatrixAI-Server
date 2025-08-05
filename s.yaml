@@ -25,6 +25,9 @@ services:
         environmentVariables:
           ENVIRONMENT: production
           NODE_ENV: production
+          SUPABASE_URL: ${env.SUPABASE_URL}
+          SUPABASE_ANON_KEY: ${env.SUPABASE_ANON_KEY}
+          SUPABASE_SERVICE_ROLE_KEY: ${env.SUPABASE_SERVICE_ROLE_KEY}
       triggers:
         - name: httpTrigger
           type: http
@@ -36,3 +39,34 @@ services:
               - PUT
               - DELETE
               - OPTIONS
+              - HEAD
+            cors:
+              allowCredentials: true
+              allowHeaders:
+                - Content-Type
+                - Authorization
+                - X-Requested-With
+                - X-API-Key
+                - Accept
+                - Origin
+                - Cache-Control
+              allowMethods:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - OPTIONS
+                - HEAD
+              allowOrigins:
+                - 'http://localhost:3000'
+                - 'https://matrix-4hv.pages.dev'
+                - 'http://localhost:3001'
+                - 'http://localhost:3002'
+                - 'https://matrixaiglobal.com'
+                - 'https://www.matrixaiglobal.com'
+                - 'https://matrixai.asia'
+              exposeHeaders:
+                - Content-Length
+                - Content-Type
+                - X-API-Key
+              maxAge: 86400

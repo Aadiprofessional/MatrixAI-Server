@@ -1,7 +1,7 @@
-import { getSupabaseClient } from '../config/database.js';
+const { getSupabaseClient } = require('../config/database.js');
 
 // Helper function to deduct coins
-export const deductCoins = async (uid, coinAmount, transactionName) => {
+const deductCoins = async (uid, coinAmount, transactionName) => {
   try {
     const supabase = getSupabaseClient();
 
@@ -68,7 +68,7 @@ export const deductCoins = async (uid, coinAmount, transactionName) => {
 };
 
 // Add retry mechanism with exponential backoff
-export const retryWithBackoff = async (fn, maxRetries = 3, baseDelay = 1000) => {
+const retryWithBackoff = async (fn, maxRetries = 3, baseDelay = 1000) => {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await fn();
@@ -85,7 +85,7 @@ export const retryWithBackoff = async (fn, maxRetries = 3, baseDelay = 1000) => 
 };
 
 // Transcribe audio using Deepgram API
-export const transcribeAudioWithDeepgram = async (audioUrl, language = "en-GB") => {
+const transcribeAudioWithDeepgram = async (audioUrl, language = "en-GB") => {
   return await retryWithBackoff(async () => {
     const DEEPGRAM_API_URL = process.env.DEEPGRAM_API_URL;
     const DEEPGRAM_API_KEY = process.env.DEEPGRAM_API_KEY;
@@ -136,4 +136,10 @@ export const transcribeAudioWithDeepgram = async (audioUrl, language = "en-GB") 
       throw error;
     }
   }, 3, 2000);
+};
+
+module.exports = {
+  deductCoins,
+  retryWithBackoff,
+  transcribeAudioWithDeepgram
 };

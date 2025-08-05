@@ -1,11 +1,11 @@
-import express from 'express';
-import { Resend } from 'resend';
-import { getSupabaseClient } from '../config/database.js';
+const express = require("express");
+const { Resend } = require("resend");
+const { getSupabaseClient } = require("../config/database.js");
 
 const router = express.Router();
 
 // Initialize Resend with API key
-const resend = new Resend('re_WBYgEP8Y_6QbRnHRnb6hwH8fuG1UebKDB');
+const resend = new Resend('re_Yws43RTp_Lq9F3kq26Hpkh664PQivxmdn');
 
 // For testing purposes, we'll log the email content instead of sending it
 // when in development environment
@@ -165,4 +165,4 @@ router.get('/logs', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

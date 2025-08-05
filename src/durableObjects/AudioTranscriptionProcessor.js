@@ -1,4 +1,4 @@
-import { getSupabaseClient } from '../config/database.js';
+const { getSupabaseClient } = require('../config/database.js');
 
 // Transcribe audio using Deepgram API
 const transcribeAudioWithDeepgram = async (audioUrl, language = "en-GB", env) => {
@@ -42,7 +42,7 @@ const transcribeAudioWithDeepgram = async (audioUrl, language = "en-GB", env) =>
   }
 };
 
-export class AudioTranscriptionProcessor {
+class AudioTranscriptionProcessor {
   constructor(ctx, env) {
     this.ctx = ctx;
     this.env = env;
@@ -137,4 +137,6 @@ export class AudioTranscriptionProcessor {
       });
     }
   }
-} 
+}
+
+module.exports = { AudioTranscriptionProcessor };

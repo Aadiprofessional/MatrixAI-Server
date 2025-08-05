@@ -1,16 +1,16 @@
-import express from 'express';
-import cors from 'cors';
-import audioRoutes from './src/routes/audioRoutes.js';
-import videoRoutes from './src/routes/videoRoutes.js';
-import imageRoutes from './src/routes/imageRoutes.js';
-import userRoutes from './src/routes/userRoutes.js';
-import adminRoutes from './src/routes/adminRoutes.js';
-import emailRoutes from './src/routes/emailRoutes.js';
-import contentRoutes from './src/routes/contentRoutes.js';
-import humanizeRoutes from './src/routes/humanizeRoutes.js';
-import detectionRoutes from './src/routes/detectionRoutes.js';
-import paymentRoutes from './src/routes/paymentRoutes.js';
-
+const express = require('express');
+const cors = require('cors');
+const audioRoutes = require('./src/routes/audioRoutes.js');
+const videoRoutes = require('./src/routes/videoRoutes.js');
+const imageRoutes = require('./src/routes/imageRoutes.js');
+const userRoutes = require('./src/routes/userRoutes.js');
+const adminRoutes = require('./src/routes/adminRoutes.js');
+const emailRoutes = require('./src/routes/emailRoutes.js');
+const contentRoutes = require('./src/routes/contentRoutes.js');
+const humanizeRoutes = require('./src/routes/humanizeRoutes.js');
+const detectionRoutes = require('./src/routes/detectionRoutes.js');
+const paymentRoutes = require('./src/routes/paymentRoutes.js');
+const presentationRoutes = require('./src/routes/presentationRoutes.js');
 
 // Set up environment variables with fallback configuration
 const setupEnvironment = () => {
@@ -44,8 +44,8 @@ const app = express();
 // CORS configuration
 const corsOptions = {
   origin: ['http://localhost:3000', 'https://matrix-4hv.pages.dev', 'http://localhost:3001', 'http://localhost:3002', 'https://matrixaiglobal.com', 'https://www.matrixaiglobal.com', 'https://matrixai.asia'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-API-Key'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-API-Key', 'Accept', 'Origin', 'Cache-Control', 'X-Requested-With'],
   credentials: true,
   preflightContinue: false,
   optionsSuccessStatus: 204
@@ -79,6 +79,7 @@ app.use('/api/content', contentRoutes);
 app.use('/api/humanize', humanizeRoutes);
 app.use('/api/detection', detectionRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/presentation', presentationRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -132,4 +133,4 @@ app.use((error, req, res, next) => {
   });
 });
 
-export default app;
+module.exports = app;

@@ -15,13 +15,14 @@
         "POST",
         "PUT",
         "DELETE",
-        "OPTIONS"
+        "OPTIONS",
+        "HEAD"
       ],
       "authType": "anonymous",
       "disableURLInternet": false
     },
     "createdTime": "2025-07-07T06:16:49Z",
-    "lastModifiedTime": "2025-07-29T22:58:26Z",
+    "lastModifiedTime": "2025-08-05T20:43:33Z",
     "status": null,
     "targetArn": null,
     "name": "httpTrigger"

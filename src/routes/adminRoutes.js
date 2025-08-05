@@ -1,6 +1,6 @@
-import express from 'express';
-import { getSupabaseClient } from '../config/database.js';
-import { authenticateAdmin } from '../middleware/auth.js';
+const express = require("express");
+const { getSupabaseClient } = require("../config/database.js");
+const { authenticateAdmin } = require("../middleware/auth.js");
 
 const router = express.Router();
 
@@ -486,4 +486,4 @@ router.all('/removeCoupon', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

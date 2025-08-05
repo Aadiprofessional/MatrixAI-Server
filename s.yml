@@ -33,6 +33,7 @@ services:
           BASE_URL: ${env.BASE_URL}
           SUPABASE_URL: ${env.SUPABASE_URL}
           SUPABASE_ANON_KEY: ${env.SUPABASE_ANON_KEY}
+          SUPABASE_SERVICE_ROLE_KEY: ${env.SUPABASE_SERVICE_ROLE_KEY}
           DEEPGRAM_API_URL: ${env.DEEPGRAM_API_URL}
           DEEPGRAM_API_KEY: ${env.DEEPGRAM_API_KEY}
           DASHSCOPE_API_KEY: ${env.DASHSCOPE_API_KEY}
@@ -55,20 +56,27 @@ services:
                 - Content-Type
                 - Authorization
                 - X-Requested-With
+                - X-API-Key
+                - Accept
+                - Origin
+                - Cache-Control
               allowMethods:
                 - GET
                 - POST
                 - PUT
                 - DELETE
                 - OPTIONS
+                - HEAD
               allowOrigins:
                 - 'http://localhost:3000'
                 - 'https://matrix-4hv.pages.dev'
                 - 'http://localhost:3001'
+                - 'http://localhost:3002'
                 - 'https://matrixaiglobal.com'
                 - 'https://www.matrixaiglobal.com'
                 - 'https://matrixai.asia'
               exposeHeaders:
                 - Content-Length
                 - Content-Type
+                - X-API-Key
               maxAge: 86400

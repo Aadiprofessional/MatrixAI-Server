@@ -1,12 +1,13 @@
 // videoRoutes.js
-import express from 'express';
-import { getSupabaseClient } from '../config/database.js';
-import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import fetch from 'node-fetch';
+const express = require("express");
+const { getSupabaseClient } = require("../config/database.js");
+const uuid = require("uuid");
+const uuidv4 = uuid.v4;
+const axios = require("axios");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+// fetch is available globally in Node.js 18+
 
 // Configure multer for memory storage
 const storage = multer.memoryStorage();
@@ -1313,4 +1314,4 @@ router.all('/getVideoStatus', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

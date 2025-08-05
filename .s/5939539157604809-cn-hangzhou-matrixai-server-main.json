@@ -8,16 +8,19 @@
     "timeout": 900,
     "initializer": "",
     "initializationTimeout": 3,
-    "codeSize": 32519045,
-    "codeChecksum": "14431989285566960942",
+    "codeSize": 52698855,
+    "codeChecksum": "4344117758276669164",
     "memorySize": 1024,
     "gpuMemorySize": null,
     "environmentVariables": {
       "ENVIRONMENT": "production",
-      "NODE_ENV": "production"
+      "NODE_ENV": "production",
+      "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdGdkaGVoeGhnYXJrb252cGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ2Njg4MTIsImV4cCI6MjA1MDI0NDgxMn0.mY8nx-lKrNXjJxHU7eEja3-fTSELQotOP4aZbxvmNPY",
+      "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdGdkaGVoeGhnYXJrb252cGZxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNDY2ODgxMiwiZXhwIjoyMDUwMjQ0ODEyfQ.96FIL3jqf7QfnMITUkx5ze6t417VPkLFi83Su6Cgb7c",
+      "SUPABASE_URL": "https://ddtgdhehxhgarkonvpfq.supabase.co"
     },
     "createdTime": "2025-07-07T06:16:41Z",
-    "lastModifiedTime": "2025-07-29T22:58:25Z",
+    "lastModifiedTime": "2025-08-05T20:43:32Z",
     "instanceConcurrency": 1,
     "instanceSoftConcurrency": null,
     "customContainerConfig": null,
